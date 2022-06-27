@@ -18,6 +18,10 @@ const prevBtn = $('.btn-prev')
 const randomBtn = $('.btn-random')
 const repeatBtn = $('.btn-repeat')
 const playList = $('.playlist')
+let minSong, secSong;
+const start = $(".start") 
+const end = $(".end")
+//console.log(min,sec)
 
 const app = {
     currentIndex: 0,   
@@ -61,52 +65,52 @@ const app = {
             "https://avatar-ex-swe.nixcdn.com/singer/avatar/2021/03/30/c/2/0/6/1617079270471_600.jpg"
         },
         {
-          name: "Chúng Ta Sau Này",
-          singer: "T.R.I",
+          name: "3107 3",
+          singer: "W/n, Duongg, Nâu, Titie",
           path:
-            "https://aredir.nixcdn.com/NhacCuaTui1010/ChungTaSauNay-TRI-6929586.mp3?st=nQiJaRO1xusJm1pcwreHfg&e=1631635351",
+            "https://aredir.nixcdn.com/Unv_Audio199/31073-WNDuonggNautitie-7059323.mp3?st=aLj9uX-swNJUByZ7uFeZbg&e=1631635351",
           image:
-            "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/08/12/f/2/d/1/1597199590443_600.jpg"
+            "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/12/10/e/8/9/7/1575970629322_600.jpg"
         },
         {
-            name: "Chúng Ta Sau Này",
-            singer: "T.R.I",
+            name: "Đường Tôi Chở Em Về",
+            singer: "Bùi Trường Linh",
             path:
-              "https://aredir.nixcdn.com/NhacCuaTui1010/ChungTaSauNay-TRI-6929586.mp3?st=nQiJaRO1xusJm1pcwreHfg&e=1631635351",
+              "https://aredir.nixcdn.com/Unv_Audio164/DuongTaChoEmVe-buitruonglinh-6318765.mp3?st=5oHAI-53JlN_KWlTrlDXBw&e=1631635351",
             image:
-              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/08/12/f/2/d/1/1597199590443_600.jpg"
+              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/11/16/6/5/0/2/1605520530526_600.jpg"
           },
           {
-            name: "Chúng Ta Sau Này",
-            singer: "T.R.I",
+            name: "3 1 0 7 -2",
+            singer: "Duongg, Nâu, W/n",
             path:
-              "https://aredir.nixcdn.com/NhacCuaTui1010/ChungTaSauNay-TRI-6929586.mp3?st=nQiJaRO1xusJm1pcwreHfg&e=1631635351",
+              "https://aredir.nixcdn.com/NhacCuaTui1011/31072-DuonggNauWn-6937818.mp3?st=ZHCUV5EBECSPPows9AkiXA&e=1631635351",
             image:
-              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/08/12/f/2/d/1/1597199590443_600.jpg"
+              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/12/10/e/8/9/7/1575970629322_600.jpg"
           },
           {
-            name: "Chúng Ta Sau Này",
-            singer: "T.R.I",
+            name: "Nàng Thơ",
+            singer: "Hoàng Dũng",
             path:
-              "https://aredir.nixcdn.com/NhacCuaTui1010/ChungTaSauNay-TRI-6929586.mp3?st=nQiJaRO1xusJm1pcwreHfg&e=1631635351",
+              "https://aredir.nixcdn.com/NhacCuaTui1001/NangTho-HoangDung-6413381.mp3?st=c_2EUWSl3W1LsdeJlkdVJg&e=1631635351",
             image:
-              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/08/12/f/2/d/1/1597199590443_600.jpg"
+              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/09/19/1/e/f/8/1568871085871_600.jpg"
           },
           {
-            name: "Chúng Ta Sau Này",
-            singer: "T.R.I",
+            name: "Forget Me Now",
+            singer: "Fishy, Trí Dũng",
             path:
-              "https://aredir.nixcdn.com/NhacCuaTui1010/ChungTaSauNay-TRI-6929586.mp3?st=nQiJaRO1xusJm1pcwreHfg&e=1631635351",
+              "https://aredir.nixcdn.com/NhacCuaTui1021/ForgetMeNow-FishyTriDung-7085475.mp3?st=Cnrbu8hETwQ7vbAVnaEezg&e=1631635351",
             image:
-              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/08/12/f/2/d/1/1597199590443_600.jpg"
+              "./assets/img/download.jfif"
           },
           {
-            name: "Chúng Ta Sau Này",
-            singer: "T.R.I",
+            name: "Thích Em Hơi Nhiều",
+            singer: "Wren Evans",
             path:
-              "https://aredir.nixcdn.com/NhacCuaTui1010/ChungTaSauNay-TRI-6929586.mp3?st=nQiJaRO1xusJm1pcwreHfg&e=1631635351",
+              "https://aredir.nixcdn.com/Unv_Audio198/ThichEmHoiNhieu-WrenEvans-7034969.mp3?st=UfWXEy6KMbgg-xXMu3dqeQ&e=1631635351",
             image:
-              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/08/12/f/2/d/1/1597199590443_600.jpg"
+              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2021/06/28/b/2/0/9/1624860911842_600.jpg"
           },
         // {
         //     name: "Nevada",
@@ -181,6 +185,7 @@ const app = {
             player.classList.add('playing')
             cdThumbAnimate.play()
            
+           
         }
 
         //khi tien do bai hat thay doi
@@ -188,7 +193,13 @@ const app = {
             if(audio.duration) {
                 const progressPercent = Math.floor(audio.currentTime / audio.duration *100)
                 progress.value = progressPercent
+                _this.loadTimeSongChange();
+                
             }
+        }
+
+        audio.onplaying = function() {
+          _this.loadTimeSong()
         }
 
         //xu ly khi tua song
@@ -212,6 +223,8 @@ const app = {
             audio.play();
             _this.render()
             _this.scrollToActiveSong()
+            
+           
         }
         //khi prev bai hat
         prevBtn.onclick =function() {
@@ -290,6 +303,8 @@ const app = {
         heading.textContent = this.currentSong.name
         cdThumb.style.backgroundImage =    `url('${this.currentSong.image}')`;
         audio.src = this.currentSong.path
+        
+      
 
       },
       nextSong: function() {
@@ -329,6 +344,26 @@ const app = {
     //   loadConfig: function() {
     //     this.isRandom = this.config.isRandom
     //   }
+      loadTimeSong : function() {
+        if(Math.floor(audio.duration)%60 < 10)
+        {
+          end.innerHTML  = `${Math.floor (Math.floor(audio.duration)/60)}:0${Math.floor(audio.duration)%60}`
+        }
+        else{
+          end.innerHTML  = `${Math.floor (Math.floor(audio.duration)/60)}:${Math.floor(audio.duration)%60}`
+        }
+
+       
+            // console.log(audio.duration)
+            // console.log(Math.floor(parseInt( audio.duration))%60,Math.floor (Math.floor(audio.duration)/60))
+      },
+      loadTimeSongChange : function() {
+        if(Math.floor(audio.currentTime)%60 < 10){
+          start.innerHTML =`${Math.floor (Math.floor(audio.currentTime)/60)}:0${Math.floor(parseInt( audio.currentTime))%60}` 
+        }else {
+          start.innerHTML =`${Math.floor (Math.floor(audio.currentTime)/60)}:${Math.floor(parseInt( audio.currentTime))%60}`
+        }
+      },
       
       start: function() {
         this.defineProperties();

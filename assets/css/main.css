@@ -107,12 +107,19 @@
     justify-content: center;
     background-color: var(--primary-color);
   }
+
+  .time {
+    display: flex;
+    align-items: center;
+  }
   /* input{
     width: 90%;
     margin: 20px 0 0 10px;
 } */
   .progress {
-    width: 100%;
+    width: 80%;
+    display: block;
+    margin: 14px auto;
     /* -webkit-appearance: none; */
     /* appearance: button;
 -moz-appearance: button; */
