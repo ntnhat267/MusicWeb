@@ -1,0 +1,20 @@
+{
+  "name": "musicplayer",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "json-server --watch db.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ntnhat267/MusicWeb.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ntnhat267/MusicWeb/issues"
+  },
+  "homepage": "https://github.com/ntnhat267/MusicWeb#readme",
+  "description": ""
+}

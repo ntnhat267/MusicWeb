@@ -19,362 +19,295 @@ const randomBtn = $('.btn-random')
 const repeatBtn = $('.btn-repeat')
 const playList = $('.playlist')
 let minSong, secSong;
-const start = $(".start") 
+const start = $(".start")
 const end = $(".end")
 //console.log(min,sec)
 
-const app = {
-    currentIndex: 0,   
-    isPlaying: false,
-    isRandom: false,
-    isRepeat: false,
-    config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
-    setConfig: function(key, value) {
-        this.config[key] = value;
-        localStorage.setItem(PLAYER_STORAGE_KEY,JSON.stringify(this.config))
-    },
-    songs: [
+const api = "http://localhost:3000/songs"
 
-        {
-            name: "3 1 0 7",
-            singer: "W/n, Duongg, Nâu",
-            path: "https://aredir.nixcdn.com/NhacCuaTui996/3107-WnDuonggNau-6099150.mp3?st=h87GQMwpJ8h0_4UH-6Ov7A&e=1631635351",
-            image:
-              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/12/10/e/8/9/7/1575970629322_600.jpg"
-          },
-        {
-          name: "Cưới Thôi",
-          singer: "Masew, Masiu, B Ray, TAP",
-          path: "https://aredir.nixcdn.com/NhacCuaTui1021/CuoiThoi-MasewMasiuBRayTAPVietNam-7085648.mp3?st=Fdf-94PGaMjuqak7C3FJzw&e=1631635351",
-          image: "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/10/29/a/a/d/4/1572318457703_600.jpg"
-        },
-        
-        
-        {
-          name: "Thức Giấc",
-          singer: "Da LAB",
-          path: "https://aredir.nixcdn.com/NhacCuaTui1018/ThucGiac-DaLAB-7048212.mp3?st=k5j9GqLV87l3MabtHRwJWw&e=1631635351",
-          image:
-            "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/08/03/3/f/4/5/1596425146149_600.jpg"
-        },
-        {
-          name: "Sài Gòn Đau Lòng Quá",
-          singer: "Hứa Kim Tuyền, Hoàng Duyên",
-          path: "https://aredir.nixcdn.com/NhacCuaTui1013/SaiGonDauLongQua-HuaKimTuyenHoangDuyen-6992977.mp3?st=bDxV4hwH5qqX-vosnmLAuw&e=1631635351",
-          image:
-            "https://avatar-ex-swe.nixcdn.com/singer/avatar/2021/03/30/c/2/0/6/1617079270471_600.jpg"
-        },
-        {
-          name: "3107 3",
-          singer: "W/n, Duongg, Nâu, Titie",
-          path:
-            "https://aredir.nixcdn.com/Unv_Audio199/31073-WNDuonggNautitie-7059323.mp3?st=aLj9uX-swNJUByZ7uFeZbg&e=1631635351",
-          image:
-            "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/12/10/e/8/9/7/1575970629322_600.jpg"
-        },
-        {
-            name: "Đường Tôi Chở Em Về",
-            singer: "Bùi Trường Linh",
-            path:
-              "https://aredir.nixcdn.com/Unv_Audio164/DuongTaChoEmVe-buitruonglinh-6318765.mp3?st=5oHAI-53JlN_KWlTrlDXBw&e=1631635351",
-            image:
-              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/11/16/6/5/0/2/1605520530526_600.jpg"
-          },
-          {
-            name: "3 1 0 7 -2",
-            singer: "Duongg, Nâu, W/n",
-            path:
-              "https://aredir.nixcdn.com/NhacCuaTui1011/31072-DuonggNauWn-6937818.mp3?st=ZHCUV5EBECSPPows9AkiXA&e=1631635351",
-            image:
-              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/12/10/e/8/9/7/1575970629322_600.jpg"
-          },
-          {
-            name: "Nàng Thơ",
-            singer: "Hoàng Dũng",
-            path:
-              "https://aredir.nixcdn.com/NhacCuaTui1001/NangTho-HoangDung-6413381.mp3?st=c_2EUWSl3W1LsdeJlkdVJg&e=1631635351",
-            image:
-              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/09/19/1/e/f/8/1568871085871_600.jpg"
-          },
-          {
-            name: "Forget Me Now",
-            singer: "Fishy, Trí Dũng",
-            path:
-              "https://aredir.nixcdn.com/NhacCuaTui1021/ForgetMeNow-FishyTriDung-7085475.mp3?st=Cnrbu8hETwQ7vbAVnaEezg&e=1631635351",
-            image:
-              "./assets/img/download.jfif"
-          },
-          {
-            name: "Thích Em Hơi Nhiều",
-            singer: "Wren Evans",
-            path:
-              "https://aredir.nixcdn.com/Unv_Audio198/ThichEmHoiNhieu-WrenEvans-7034969.mp3?st=UfWXEy6KMbgg-xXMu3dqeQ&e=1631635351",
-            image:
-              "https://avatar-ex-swe.nixcdn.com/singer/avatar/2021/06/28/b/2/0/9/1624860911842_600.jpg"
-          },
-        // {
-        //     name: "Nevada",
-        //     singer: "Vicetone, Cozi Zuehlsdorff",
-        //     path:
-        //       "https://aredir.nixcdn.com/NhacCuaTui924/Nevada-Vicetone-4494556.mp3?st=sxavo8cJ6faQXE2iOiH6tw&e=1631635371",
-        //     image:
-        //       "https://avatar-ex-swe.nixcdn.com/singer/avatar/2016/07/20/a/8/c/e/1468981718704_600.jpg"
-        //   },
-       
-      ],
-      render: function() {
-        const html = this.songs.map((song,index) => {
-            return `
-            <div class="song  ${index === this.currentIndex ? 'active':''}" data-index="${index}">
-            <div class="thumb" style="background-image: url('${song.image}')"></div>
+const app = {
+  currentIndex: 0,
+  isPlaying: false,
+  isRandom: false,
+  isRepeat: false,
+  config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
+  setConfig: function (key, value) {
+    this.config[key] = value;
+    localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config))
+  },
+  songs: [
+
+  ],
+  getData:  function (callback) {
+    return fetch(api)
+      .then(function (respon) {
+        return respon.json();
+      })
+      .then(function (data) {
+        app.songs = data;
+       //console.log(app.songs)
+        return (callback)
+      })
+  },
+  render: function () {
+    const html = this.songs.map((song, index) => {
+      return `
+            <div class="song  ${index === this.currentIndex ? 'active' : ''}" data-index="${index}">
+            <div class="thumb" style="background-image: url('${song.bgImage}')"></div>
             <div class="body">
-                <h3 class="title">${song.name}</h3>
-                <p class="author">${song.singer}</p>
+                <h3 class="title">${song.title}</h3>
+                <p class="author">${song.creator}</p>
             </div>
             <div class="option">
                 <i class="fas fa-ellipsis-h"></i>
             </div>
             </div>
             `
-        })
-        playList.innerHTML = html.join('')
-      },
-      handleEvent: function() {
-        const _this = this
-        const cdWidth = cd.offsetWidth
+    })
+    playList.innerHTML = html.join('')
+  },
+  handleEvent: function () {
+    const _this = this
+    const cdWidth = cd.offsetWidth
 
-        //xu ly CD quay va dung
-        const cdThumbAnimate = cdThumb.animate([{ 
-            transform: "rotate(360deg)" 
-        }], {
-            duration: 10000, // 10 seconds
-            iterations: Infinity
-        });
-        cdThumbAnimate.pause();
+    //xu ly CD quay va dung
+    const cdThumbAnimate = cdThumb.animate([{
+      transform: "rotate(360deg)"
+    }], {
+      duration: 10000, // 10 seconds
+      iterations: Infinity
+    });
+    cdThumbAnimate.pause();
 
-        //xu ly phong to thu nho cv
-        document.onscroll = function() {
-            const scrolltop = document.documentElement.scrollTop
-            const newCdWidth= cdWidth - scrolltop
+    //xu ly phong to thu nho cv
+    document.onscroll = function () {
+      const scrolltop = document.documentElement.scrollTop
+      const newCdWidth = cdWidth - scrolltop
 
 
-            cd.style.width = newCdWidth > 0 ? newCdWidth + "px" :0
-            cd.style.opacity = newCdWidth/cdWidth;
-        }
+      cd.style.width = newCdWidth > 0 ? newCdWidth + "px" : 0
+      cd.style.opacity = newCdWidth / cdWidth;
+    }
 
-        //xu ly khi click play
-        playBtn.onclick = function() {
-            if(_this.isPlaying) {
-                audio.pause()
-            }else {
-               audio.play()
-            }
-           
-
-        }
-        //Khi song bi pause 
-        audio.onpause = function(){
-            _this.isPlaying = false
-            player.classList.remove('playing')
-            cdThumbAnimate.pause()
-        }
-
-        //Khi song duoc player 
-        audio.onplay = function(){
-            _this.isPlaying = true
-            player.classList.add('playing')
-            cdThumbAnimate.play()
-           
-           
-        }
-
-        //khi tien do bai hat thay doi
-        audio.ontimeupdate = function() {
-            if(audio.duration) {
-                const progressPercent = Math.floor(audio.currentTime / audio.duration *100)
-                progress.value = progressPercent
-                _this.loadTimeSongChange();
-                
-            }
-        }
-
-        audio.onplaying = function() {
-          _this.loadTimeSong()
-        }
-
-        //xu ly khi tua song
-        progress.onchange = function(e) {
-            const seekTime = audio.duration / 100 * e.target.value;
-            audio.currentTime = seekTime;
-
-        }
-
-        //khi next bai hat
-        nextBtn.onclick =function() {
-            if(_this.isRandom)
-            {
-                _this.playRandomSong();
-            }
-            else{
-                _this.nextSong();
-                
-
-            }
-            audio.play();
-            _this.render()
-            _this.scrollToActiveSong()
-            
-           
-        }
-        //khi prev bai hat
-        prevBtn.onclick =function() {
-            if(_this.isRandom)
-            {
-                _this.playRandomSong();
-            }
-            else {
-                _this.prevSong();
-
-            }
-            audio.play();
-            _this.render()
-            _this.scrollToActiveSong()
-        }
-        //khi random 
-        randomBtn.onclick = function(e) {
-            _this.isRandom = ! _this.isRandom
-            _this.setConfig('isRandom', _this.isRandom)
-            randomBtn.classList.toggle("active", _this.isRandom)
-           
-        }
-
-        //xu ly next khi audio ended
-        audio.onended = function() {
-            if(_this.isRepeat){
-                audio.play()
-            }else {
-                nextBtn.click()
-            }
-            
-        }
-
-        //xu ly lap lai 1 song
-        repeatBtn.onclick = function() {
-            _this.isRepeat = !_this.isRepeat;
-            _this.setConfig('isRepeat', _this.isRepeat)
-            repeatBtn.classList.toggle("active", _this.isRepeat)
-        }
-
-        //lang nghe hanh vi click vao playlist
-        playList.onclick = function(e) {
-            const songNode =  e.target.closest('.song:not(.active)')
-            if (songNode || e.target.closest('.option') ) {
-
-                
-                if(songNode) {
-                    //songNode.getAttribute('data-index')
-            
-                    _this.currentIndex = Number(songNode.dataset.index)
-                    _this.loadCurrentSong()
-                    _this.render()
-                    audio.play()
-                }
-                if(e.target.closest('.option')) {
-
-                }
-
-            }
-        }
- 
-
-      },
-      //20:00
-      defineProperties: function() {
-        Object.defineProperty(this, 'currentSong' , {
-            get: function() {
-                return this.songs[this.currentIndex]
-            }
-        })
-       
-      },
-      loadCurrentSong: function() {
-        
-
-        heading.textContent = this.currentSong.name
-        cdThumb.style.backgroundImage =    `url('${this.currentSong.image}')`;
-        audio.src = this.currentSong.path
-        
-      
-
-      },
-      nextSong: function() {
-        this.currentIndex++
-        if(this.currentIndex >= this.songs.length) {
-            this.currentIndex = 0;
-        }
-        this.loadCurrentSong()
-      },
-
-      prevSong: function() {
-        this.currentIndex--
-        if(this.currentIndex <= 0) {
-            this.currentIndex = this.songs.length-1;
-        }
-        this.loadCurrentSong()
-      },
-      playRandomSong: function() {
-        let newIndex;
-        do {
-            newIndex = Math.floor(Math.random() * this.songs.length)
-        } 
-        while(newIndex == this.currentIndex)
-
-        this.currentIndex = newIndex
-        this.loadCurrentSong();
-      },
-      scrollToActiveSong : function() {
-        setTimeout(() => {
-            $('.song.active').scrollIntoView( {
-                behavior: 'smooth',
-                block: 'center',
-            })
-
-        },300)
-      },
-    //   loadConfig: function() {
-    //     this.isRandom = this.config.isRandom
-    //   }
-      loadTimeSong : function() {
-        if(Math.floor(audio.duration)%60 < 10)
-        {
-          end.innerHTML  = `${Math.floor (Math.floor(audio.duration)/60)}:0${Math.floor(audio.duration)%60}`
-        }
-        else{
-          end.innerHTML  = `${Math.floor (Math.floor(audio.duration)/60)}:${Math.floor(audio.duration)%60}`
-        }
-
-       
-            // console.log(audio.duration)
-            // console.log(Math.floor(parseInt( audio.duration))%60,Math.floor (Math.floor(audio.duration)/60))
-      },
-      loadTimeSongChange : function() {
-        if(Math.floor(audio.currentTime)%60 < 10){
-          start.innerHTML =`${Math.floor (Math.floor(audio.currentTime)/60)}:0${Math.floor(parseInt( audio.currentTime))%60}` 
-        }else {
-          start.innerHTML =`${Math.floor (Math.floor(audio.currentTime)/60)}:${Math.floor(parseInt( audio.currentTime))%60}`
-        }
-      },
-      
-      start: function() {
-        this.defineProperties();
-        this.handleEvent();
-
-        this.loadCurrentSong();
-
-        this.render();
+    //xu ly khi click play
+    playBtn.onclick = function () {
+      if (_this.isPlaying) {
+        audio.pause()
+      } else {
+        audio.play()
       }
+
+
+    }
+    //Khi song bi pause 
+    audio.onpause = function () {
+      _this.isPlaying = false
+      player.classList.remove('playing')
+      cdThumbAnimate.pause()
+    }
+
+    //Khi song duoc player 
+    audio.onplay = function () {
+      _this.isPlaying = true
+      player.classList.add('playing')
+      cdThumbAnimate.play()
+
+
+    }
+
+    //khi tien do bai hat thay doi
+    audio.ontimeupdate = function () {
+      if (audio.duration) {
+        const progressPercent = Math.floor(audio.currentTime / audio.duration * 100)
+        progress.value = progressPercent
+        _this.loadTimeSongChange();
+
+      }
+    }
+
+    audio.onplaying = function () {
+      _this.loadTimeSong()
+    }
+
+    //xu ly khi tua song
+    progress.onchange = function (e) {
+      const seekTime = audio.duration / 100 * e.target.value;
+      audio.currentTime = seekTime;
+
+    }
+
+    //khi next bai hat
+    nextBtn.onclick = function () {
+      if (_this.isRandom) {
+        _this.playRandomSong();
+      }
+      else {
+        _this.nextSong();
+
+
+      }
+      audio.play();
+      _this.render()
+      _this.scrollToActiveSong()
+
+
+    }
+    //khi prev bai hat
+    prevBtn.onclick = function () {
+      if (_this.isRandom) {
+        _this.playRandomSong();
+      }
+      else {
+        _this.prevSong();
+
+      }
+      audio.play();
+      _this.render()
+      _this.scrollToActiveSong()
+    }
+    //khi random 
+    randomBtn.onclick = function (e) {
+      _this.isRandom = !_this.isRandom
+      _this.setConfig('isRandom', _this.isRandom)
+      randomBtn.classList.toggle("active", _this.isRandom)
+
+    }
+
+    //xu ly next khi audio ended
+    audio.onended = function () {
+      if (_this.isRepeat) {
+        audio.play()
+      } else {
+        nextBtn.click()
+      }
+
+    }
+
+    //xu ly lap lai 1 song
+    repeatBtn.onclick = function () {
+      _this.isRepeat = !_this.isRepeat;
+      _this.setConfig('isRepeat', _this.isRepeat)
+      repeatBtn.classList.toggle("active", _this.isRepeat)
+    }
+
+    //lang nghe hanh vi click vao playlist
+    playList.onclick = function (e) {
+      const songNode = e.target.closest('.song:not(.active)')
+      if (songNode || e.target.closest('.option')) {
+
+
+        if (songNode) {
+          //songNode.getAttribute('data-index')
+
+          _this.currentIndex = Number(songNode.dataset.index)
+          _this.loadCurrentSong()
+          _this.render()
+          audio.play()
+        }
+        if (e.target.closest('.option')) {
+
+        }
+
+      }
+    }
+
+
+  },
+  //20:00
+  defineProperties: function () {
+    Object.defineProperty(this, 'currentSong', {
+      get: function () {
+        return this.songs[this.currentIndex]
+      }
+    })
+
+  },
+  loadCurrentSong: function () {
+
+    heading.textContent = this.currentSong.title
+    cdThumb.style.backgroundImage = `url('${this.currentSong.bgImage}')`;
+    audio.src = this.currentSong.music
+
+    console.log("loadcurrentsong")
+
+
+
+
+  },
+  nextSong: function () {
+    this.currentIndex++
+    if (this.currentIndex >= this.songs.length) {
+      this.currentIndex = 0;
+    }
+    this.loadCurrentSong()
+  },
+
+  prevSong: function () {
+    this.currentIndex--
+    
+    if (this.currentIndex <0) {
+      this.currentIndex = this.songs.length - 1;
+    }
+    this.loadCurrentSong()
+  },
+  playRandomSong: function () {
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * this.songs.length)
+    }
+    while (newIndex == this.currentIndex)
+
+    this.currentIndex = newIndex
+    this.loadCurrentSong();
+  },
+  scrollToActiveSong: function () {
+    setTimeout(() => {
+      $('.song.active').scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+
+    }, 300)
+  },
+  //   loadConfig: function() {
+  //     this.isRandom = this.config.isRandom
+  //   }
+  loadTimeSong: function () {
+    if (Math.floor(audio.duration) % 60 < 10) {
+      end.innerHTML = `${Math.floor(Math.floor(audio.duration) / 60)}:0${Math.floor(audio.duration) % 60}`
+    }
+    else {
+      end.innerHTML = `${Math.floor(Math.floor(audio.duration) / 60)}:${Math.floor(audio.duration) % 60}`
+    }
+
+
+    // console.log(audio.duration)
+    // console.log(Math.floor(parseInt( audio.duration))%60,Math.floor (Math.floor(audio.duration)/60))
+  },
+  loadTimeSongChange: function () {
+    if (Math.floor(audio.currentTime) % 60 < 10) {
+      start.innerHTML = `${Math.floor(Math.floor(audio.currentTime) / 60)}:0${Math.floor(parseInt(audio.currentTime)) % 60}`
+    } else {
+      start.innerHTML = `${Math.floor(Math.floor(audio.currentTime) / 60)}:${Math.floor(parseInt(audio.currentTime)) % 60}`
+    }
+  },
+
+  start: async function () {
+
+
+
+    await this.getData(this.render())
+    this.defineProperties();
+    this.handleEvent();
+
+    this.loadCurrentSong();
+
+    this.render();
+  }
 }
 
+// app.getData();
+// var a =setTimeout(app.loadCurrentSong(),10000)
 
 app.start();
 
