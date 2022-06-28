@@ -23,7 +23,7 @@ const start = $(".start")
 const end = $(".end")
 //console.log(min,sec)
 
-const api = "http://localhost:3000/songs"
+const api = "https://api.apify.com/v2/key-value-stores/EJ3Ppyr2t73Ifit64/records/LATEST?fbclid=IwAR1WLvmt1_SejwdlmWLLaN4kfTTeI4PPNw6v67QKDhp4woRWKRkfRj9RFC4"
 
 const app = {
   currentIndex: 0,
@@ -44,8 +44,9 @@ const app = {
         return respon.json();
       })
       .then(function (data) {
-        app.songs = data;
-       //console.log(app.songs)
+        app.songs = data.songs.top100_VN[0].songs;
+        // console.log(data.songs.top100_VN[0])
+        // console.log(app.songs[6])
         return (callback)
       })
   },
